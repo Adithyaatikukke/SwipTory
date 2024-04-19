@@ -1,0 +1,94 @@
+.header_container {
+  box-shadow: 0px 4px 15px 0px #00000026;
+  height: 4.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header_section {
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
+}
+.header_register_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 1rem;
+}
+.register_btn {
+  border: none;
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 1.2rem;
+  background: #ff7373;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.brand_text {
+  font-size: 2rem;
+  font-weight: 600;
+}
+.signin_btn {
+  border: none;
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 1.2rem;
+  background: #73abff;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.header_user_info_section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 2rem;
+  position: relative;
+  overflow: visible;
+}
+.header_user_info_section > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.3rem;
+  border: none;
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 1.2rem;
+  background: #ff7373;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.header_user_info_section > span > img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+}
+.mobile_menu {
+  display: none;
+}
+.desktop_menu {
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .header_user_info_section {
+    display: none;
+  }
+  .mobile_menu {
+    display: block;
+  }
+  .header_register_box {
+    display: none;
+  }
+  .brand_text {
+    font-size: 1.3rem;
+  }
+}

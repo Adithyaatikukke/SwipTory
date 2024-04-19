@@ -1,0 +1,66 @@
+.story_conatiner {
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+
+  display: flex;
+}
+.story_section {
+  width: max-content;
+  cursor: pointer;
+}
+.story_box {
+  height: 80vh;
+
+  position: relative;
+}
+.box_up {
+  top: 1rem;
+  width: 18.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+}
+.story_modal_close_icon {
+  font-size: 1.7rem;
+  cursor: pointer;
+}
+.story_modal_share_icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.box_down {
+  bottom: 0rem;
+  width: 18.5rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+
+  position: absolute;
+}
+.story_description {
+  width: 19rem;
+  position: absolute;
+  font-size: 0.8rem;
+  bottom: -80vh;
+}
+.down_icon_box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.story_modal_mark_icon {
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.story_modal_like_icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.icon_container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,62 @@
+.mobile_container {
+  display: none;
+}
+.mobile_section {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  row-gap: 2rem;
+  width: 100%;
+}
+.mobile_section > button {
+  border: none;
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 1.2rem;
+  background: #ff7373;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.user_img > img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+.mobile_user_sec {
+  max-width: 20rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.username {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+.close {
+  width: 3rem;
+  height: 3rem;
+  background-color: rgb(212, 209, 209);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 700px) {
+  .mobile_container {
+    width: 100vw;
+    background-color: white;
+    height: 60vh;
+    display: flex;
+    position: fixed;
+    z-index: 20;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.3s ease-in-out;
+  }
+}
