@@ -1,92 +1,113 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./story.module.css";
 import Stories from "react-insta-stories";
 import { IoMdClose } from "react-icons/io";
 import { TbLocationFilled } from "react-icons/tb";
 import { FaBookmark, FaHeart } from "react-icons/fa";
-const burakHeading = {
-  heading: (
-    <div className={style.story_description}>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, soluta.
-    </div>
-  ),
-};
-const initialStories = [
-  {
-    url: "https://i.imgur.com/QpUEcfi.jpg",
-    type: "image",
-    header: burakHeading,
-    seeMore: true,
-    duration: 1500,
-  },
-  {
-    url: "https://i.imgur.com/in5Jr1h.jpg",
-    type: "image",
-    header: burakHeading,
-    seeMore: ({ close }) => {
-      return <div onClick={close}>Hello, click to close this.</div>;
-    },
-  },
-  {
-    url: "https://i.imgur.com/LBRXhIq.jpg",
-    type: "image",
-    header: burakHeading,
-  },
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectStory,
+  setSelectStory,
+  toggle,
+} from "../../redux/story/storySlice";
 
-  {
-    url: "https://i.imgur.com/ARMxyC4.png",
-    type: "image",
-    header: burakHeading,
-  },
-];
-const StoryComponent = () => {
-  const [stories, setStories] = React.useState(initialStories);
+const Story = () => {
+  const [stories, setStories] = useState([]);
+  const toggleStory = useSelector(toggle);
+  const clickStory = useSelector(selectStory);
+  const dispatch = useDispatch();
+
+  const handleResetSelectStory = () => {
+    dispatch(setSelectStory({}));
+  };
+
+  const setHeader = (header, description) => {
+    const burakHeading = {
+      heading: (
+        <div className={style.story_info}>
+          <span className={style.story_header}>{header}</span>
+          <span className={style.story_description}>{description}</span>
+        </div>
+      ),
+    };
+    return burakHeading;
+  };
+
+  let initialStories = [];
+  const configureAllimages = () => {
+    if (clickStory?.length) {
+      clickStory?.forEach(({ image, heading, description }) => {
+        let val = {
+          url: image,
+          type: "image",
+          header: setHeader(heading, description),
+
+          duration: 1500,
+        };
+
+        initialStories.push(val);
+      });
+      setStories(initialStories);
+    }
+  };
+  useEffect(() => {
+    configureAllimages();
+  }, [toggleStory]);
 
   const onAllStoriesEndHandler = () => {
     console.log("stories ended");
   };
 
   const storyContent = {
-    width: "auto",
+    width: "25rem",
+    height: "20rem",
     maxWidth: "100%",
     maxHeight: "100%",
+
     margin: "auto",
   };
 
   return (
     <section className={style.story_conatiner}>
       <div className={style.story_section}>
-        <div className={style.icon_container}>
-          <span className={style.story_modal_mark_icon}>
-            <FaBookmark />
-          </span>
-          <span className={style.story_modal_like_icon}>
-            <FaHeart />
-          </span>
-          <span className={style.story_modal_share_icon}>
-            <TbLocationFilled />
-          </span>
-          <span className={style.story_modal_close_icon}>
-            <IoMdClose />
-          </span>
+        <div className={style.story_int}>
+          <div className={style.icon_container}>
+            <span className={style.story_modal_mark_icon}>
+              <FaBookmark />
+            </span>
+            <span className={style.story_modal_like_icon}>
+              <FaHeart />
+            </span>
+            <span className={style.story_modal_share_icon}>
+              <TbLocationFilled />
+            </span>
+            <span
+              onClick={() => handleResetSelectStory()}
+              className={style.story_modal_close_icon}
+            >
+              <IoMdClose />
+            </span>
+          </div>
         </div>
-        <Stories
-          stories={stories}
-          defaultInterval={5000}
-          width={"20rem"}
-          height={"90vh"}
-          storyStyles={storyContent}
-          loop={false}
-          keyboardNavigation={true}
-          isPaused={() => {}}
-          currentIndex={() => {}}
-          onStoryStart={() => {}}
-          onStoryEnd={() => {}}
-          onAllStoriesEnd={onAllStoriesEndHandler}
-        />
+        {stories.length > 0 && (
+          <Stories
+            stories={stories}
+            defaultInterval={5000}
+            width={"20rem"}
+            height={"85vh"}
+            storyStyles={storyContent}
+            loop={false}
+            keyboardNavigation={true}
+            isPaused={() => {}}
+            currentIndex={() => {}}
+            onStoryStart={() => {}}
+            onStoryEnd={() => {}}
+            onAllStoriesEnd={onAllStoriesEndHandler}
+          />
+        )}
       </div>
     </section>
   );
 };
 
-export default StoryComponent;
+export default Story;

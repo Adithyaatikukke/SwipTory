@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./register.module.css";
 import { useSelector } from "react-redux";
 import {
@@ -11,6 +11,12 @@ import { IoMdEyeOff } from "react-icons/io";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { BeatLoader } from "react-spinners";
+import {
+  registerError,
+  registerUserAysnc,
+  userFatching,
+  userToggle,
+} from "../../redux/user/userSlice";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const registerStatus = useSelector(registerMode);
@@ -19,7 +25,12 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [registarErrorBackend, setRegisterErrorBackend] = useState(false);
+
   const dispatch = useDispatch();
+  const toggle = useSelector(userToggle);
+  const error = useSelector(registerError);
+
   const handleSetRegisterToggle = () => {
     dispatch(setRegisterMode());
   };
@@ -36,14 +47,29 @@ const Register = () => {
       } else if (!name) {
         setNameError(true);
       } else {
-        setName("");
-        setPassword("");
+        setIsLoading(true);
+        dispatch(registerUserAysnc({ password, name }));
       }
     } catch (error) {
       console.log(error);
     } finally {
     }
   };
+  const handleResetRegisterPage = () => {
+    dispatch(setRegisterMode());
+  };
+  useEffect(() => {
+    if (isLoading && !error) {
+      setIsLoading(false);
+      setName("");
+      setPassword("");
+      handleResetRegisterPage();
+    }
+    if (error) {
+      setIsLoading(false);
+      setRegisterErrorBackend(true);
+    }
+  }, [toggle]);
   return (
     <section className={style.register_container}>
       <div className={style.register_section}>
@@ -79,13 +105,14 @@ const Register = () => {
           <div className={style.error_section}>
             {nameError && <span>*Username is required!</span>}
             {passwordError && <span>*Password is required!</span>}
+            {registarErrorBackend && <span>User already exists!</span>}
           </div>
         </div>
         <button
           onClick={() => handleSubmitForm()}
           className={style.register_btn}
         >
-          {!isLoading ? <BeatLoader color="white" /> : "Register"}
+          {isLoading ? <BeatLoader color="white" /> : "Register"}
         </button>
       </div>
     </section>

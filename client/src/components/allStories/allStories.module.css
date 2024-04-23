@@ -1,0 +1,121 @@
+.allStories_container {
+  width: 100%;
+}
+.allStories_section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.stories_section {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 15rem);
+  justify-content: space-between;
+  row-gap: 1rem;
+}
+.image {
+  height: 20rem;
+  width: 15rem;
+  filter: brightness(70%);
+  border-radius: 0.5rem;
+}
+.story_box {
+  width: 100%;
+  display: flex;
+  row-gap: 3rem;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+}
+.see_more_btn {
+  width: 6rem;
+  height: 2.2rem;
+  border-radius: 1.5rem;
+  border: none;
+  background: #ff7373;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.no_story {
+  color: #8e8e8e;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.tag {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.story_container {
+  width: max-content;
+  position: relative;
+  cursor: pointer;
+}
+.story_info {
+  width: 90%;
+  background-color: transparent;
+  color: white;
+  position: absolute;
+  bottom: 1rem;
+  height: 5rem;
+  left: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+.story_heading {
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+.story_description {
+  font-size: 0.8rem;
+}
+.edit_story_btn {
+  position: absolute;
+  right: 1rem;
+  border: none;
+  height: 2rem;
+  width: 4rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 1rem;
+  column-gap: 0.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+@media (max-width: 1100px) {
+  .stories_section {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 15rem);
+    justify-content: space-between;
+    row-gap: 1rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .stories_section {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 15rem);
+    justify-content: space-evenly;
+    row-gap: 1rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .stories_section {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(1, max-content);
+    justify-content: center;
+    row-gap: 1rem;
+  }
+}

@@ -1,16 +1,40 @@
 import React, { useEffect, useState } from "react";
 import style from "./addStory.module.css";
 import { IoMdClose } from "react-icons/io";
-import { useDispatch } from "react-redux";
-import { setAddStoryMode } from "../../redux/app/appSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  editStory,
+  setAddStoryMode,
+  setEditStory,
+  toggle,
+} from "../../redux/app/appSlice";
+import { BeatLoader } from "react-spinners";
+import {
+  createStoryAysnc,
+  stroyToggle,
+  userFatching,
+  userToggle,
+} from "../../redux/user/userSlice";
 
 const AddStory = () => {
   const dispatch = useDispatch();
-  const [slides, setSlides] = useState([
-    { id: 1, heading: "", description: "", image: "", category: "" },
-    { id: 2, heading: "", description: "", image: "", category: "" },
-    { id: 3, heading: "", description: "", image: "", category: "" },
-  ]);
+  const toggle1 = useSelector(stroyToggle);
+  const toggle2 = useSelector(toggle);
+  const isFetching = useSelector(userFatching);
+  const userEditStory = useSelector(editStory);
+  const editValue = JSON.stringify(userEditStory);
+
+  const [category, setCategory] = useState("Food");
+  const [isLoading, setIsloading] = useState(false);
+  const [slides, setSlides] = useState(
+    userEditStory?.stories?.length > 0
+      ? JSON.parse(editValue).stories
+      : [
+          { id: 1, heading: "", description: "", image: "" },
+          { id: 2, heading: "", description: "", image: "" },
+          { id: 3, heading: "", description: "", image: "" },
+        ]
+  );
   const [selectSlide, setSelectSlide] = useState(slides[0]);
   const [error, setError] = useState(false);
 
@@ -19,7 +43,6 @@ const AddStory = () => {
     heading: "",
     description: "",
     image: "",
-    category: "",
   };
 
   const handleRemoveSlide = (rmId) => {
@@ -94,25 +117,6 @@ const AddStory = () => {
       }
       setSelectSlide(val);
       setSlides(filterVal);
-    } else if (type === "CATEGORY") {
-      const val = slides.find(({ id }) => id === index);
-      const filterVal = slides.filter(({ id }) => id !== index);
-      val.category = value;
-      filterVal.push(val);
-
-      for (let i = 0; i < filterVal.length; i++) {
-        let minVal = i;
-        for (let j = i + 1; j < filterVal.length; j++) {
-          if (filterVal[j].id < filterVal[minVal].id) {
-            minVal = j;
-          }
-        }
-        if (i !== minVal) {
-          [filterVal[i], filterVal[minVal]] = [filterVal[minVal], filterVal[i]];
-        }
-      }
-      setSelectSlide(val);
-      setSlides(filterVal);
     }
   };
 
@@ -131,18 +135,18 @@ const AddStory = () => {
 
   const handleSetAddStoryPage = () => {
     dispatch(setAddStoryMode());
+    dispatch(setEditStory([]));
   };
 
   const handleSubmit = () => {
     try {
       setError(false);
-      console.log(slides);
 
       for (let slide of slides) {
         if (
           !slide.id ||
           !slide.heading ||
-          !slides[0].category ||
+          !category ||
           !slide.description ||
           !slide.image
         ) {
@@ -150,20 +154,28 @@ const AddStory = () => {
           return;
         }
       }
-      resetSlides();
       setError(false);
+      setIsloading(true);
+      dispatch(createStoryAysnc({ story: slides, category }));
     } catch (error) {
       console.log(error);
     } finally {
     }
   };
-  const resetSlides = () => {
-    setSlides([
-      { id: 1, heading: "", description: "", image: "", category: "" },
-      { id: 2, heading: "", description: "", image: "", category: "" },
-      { id: 3, heading: "", description: "", image: "", category: "" },
-    ]);
+
+  const handleNextSlide = () => {
+    setSelectSlide(slides.find(({ id }) => id === selectSlide.id + 1));
   };
+  const handlePrevSlide = () => {
+    setSelectSlide(slides.find(({ id }) => id === selectSlide.id - 1));
+  };
+
+  useEffect(() => {
+    if (isLoading) {
+      setIsloading(false);
+      handleSetAddStoryPage();
+    }
+  }, [toggle1]);
 
   return (
     <>
@@ -253,20 +265,15 @@ const AddStory = () => {
                 />
 
                 <select
-                  value={selectSlide.category}
-                  onChange={(e) =>
-                    handleSetValuesToSlides(
-                      selectSlide.id,
-                      e.target.value,
-                      "CATEGORY"
-                    )
-                  }
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                   className={style.category_input}
                 >
-                  <option value="food">Food</option>
-                  <option value="">Health</option>
-                  <option value="">Travel</option>
-                  <option value="">b</option>
+                  <option value="Food">Food</option>
+                  <option value="Health">Health</option>
+                  <option value="Travel">Travel</option>
+                  <option value="Movies">Movies</option>
+                  <option value="Education">Education</option>
                 </select>
               </div>
             </div>
@@ -277,11 +284,43 @@ const AddStory = () => {
 
             <div className={style.buttons_section}>
               <div className={style.btn_left}>
-                <button className={style.prev}>Previous</button>
-                <button className={style.next}>Next</button>
+                <button
+                  disabled={slides[0].id === selectSlide.id ? true : false}
+                  onClick={() => handlePrevSlide()}
+                  className={`${
+                    slides[0].id === selectSlide.id
+                      ? style.prev_disable
+                      : style.prev
+                  }`}
+                >
+                  Previous
+                </button>
+                <button
+                  disabled={
+                    slides[slides.length - 1].id === selectSlide.id
+                      ? true
+                      : false
+                  }
+                  onClick={() => handleNextSlide()}
+                  className={`${
+                    slides[slides.length - 1].id === selectSlide.id
+                      ? style.next_disable
+                      : style.next
+                  }`}
+                >
+                  Next
+                </button>
               </div>
               <button onClick={() => handleSubmit()} className={style.post}>
-                Post
+                {!isLoading ? (
+                  userEditStory.length > 0 ? (
+                    "Update"
+                  ) : (
+                    "Post"
+                  )
+                ) : (
+                  <BeatLoader color="white" />
+                )}
               </button>
             </div>
           </div>
@@ -387,9 +426,10 @@ const AddStory = () => {
                   className={style.mobile_category_input}
                 >
                   <option value="food">Food</option>
-                  <option value="">Health</option>
-                  <option value="">Travel</option>
-                  <option value="">Movies</option>
+                  <option value="Health">Health</option>
+                  <option value="Travel">Travel</option>
+                  <option value="Movies">Movies</option>
+                  <option value="Education">Education</option>
                 </select>
               </div>
             </div>
@@ -398,7 +438,7 @@ const AddStory = () => {
             {error ? "All fieilds must be filled!" : ""}
           </span>
           <button onClick={() => handleSubmit()} className={style.mobile_post}>
-            Post
+            {userEditStory.length > 0 ? "Update" : "Post"}
           </button>
         </div>
       </section>

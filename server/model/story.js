@@ -3,13 +3,11 @@ const { Schema } = mongoose;
 
 const storySchema = new Schema(
   {
-    heading: { type: String, required: true },
-    description: { type: String, required: true },
-    image: { type: String, required: true },
-    stories: { type: String, required: true },
+    owner: { type: String, required: true },
+    stories: { type: Array, required: true },
     category: { type: String, required: true },
   },
   { timestamps: true }
 );
-const Story = mongoose.model("Story", userSchema);
+const Story = mongoose.model("Story", storySchema);
 export default Story;

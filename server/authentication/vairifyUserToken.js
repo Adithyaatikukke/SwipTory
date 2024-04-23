@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../Model/User.js";
+import User from "../model/user.js";
 
 export const varifyToken = async (req, res, next) => {
   try {

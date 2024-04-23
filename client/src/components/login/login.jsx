@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./login.module.css";
 import { useSelector } from "react-redux";
 import {
   loginMode,
   setLoginMode,
-  setloginMode,
   setToggleDesktopMenu,
 } from "../../redux/app/appSlice";
 import { IoMdEye } from "react-icons/io";
@@ -12,6 +11,11 @@ import { IoMdEyeOff } from "react-icons/io";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { BeatLoader } from "react-spinners";
+import {
+  loginUserAysnc,
+  siginError,
+  userToggle,
+} from "../../redux/user/userSlice";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const loginStatus = useSelector(loginMode);
@@ -20,7 +24,12 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [siginErrorBackend, setSiginErrorBackend] = useState(false);
+
   const dispatch = useDispatch();
+  const toggle = useSelector(userToggle);
+  const error = useSelector(siginError);
+
   const handleSetloginToggle = () => {
     dispatch(setLoginMode());
   };
@@ -37,14 +46,31 @@ const Login = () => {
       } else if (!name) {
         setNameError(true);
       } else {
-        setName("");
-        setPassword("");
+        setIsLoading(true);
+        dispatch(loginUserAysnc({ password, name }));
       }
     } catch (error) {
       console.log(error);
     } finally {
     }
   };
+
+  const handleResetLoginPage = () => {
+    dispatch(setLoginMode());
+  };
+
+  useEffect(() => {
+    if (isLoading && !error) {
+      setIsLoading(false);
+      setName("");
+      setPassword("");
+      handleResetLoginPage();
+    }
+    if (error) {
+      setSiginErrorBackend(true);
+      setIsLoading(false);
+    }
+  }, [toggle]);
   return (
     <section className={style.login_container}>
       <div className={style.login_section}>
@@ -80,10 +106,11 @@ const Login = () => {
           <div className={style.error_section}>
             {nameError && <span>*Username is required!</span>}
             {passwordError && <span>*Password is required!</span>}
+            {siginErrorBackend && <span>User not found!</span>}
           </div>
         </div>
         <button onClick={() => handleSubmitForm()} className={style.login_btn}>
-          {!isLoading ? <BeatLoader color="white" /> : "login"}
+          {isLoading ? <BeatLoader color="white" /> : "login"}
         </button>
       </div>
     </section>

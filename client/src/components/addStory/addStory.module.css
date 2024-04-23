@@ -148,6 +148,19 @@
   border: none;
   font-size: 1.1rem;
   color: white;
+  cursor: pointer;
+}
+.prev_disable {
+  width: 8rem;
+  height: 2.5rem;
+  background-color: #7eff73;
+  border-radius: 1.2rem;
+  border: none;
+  font-size: 1.1rem;
+  color: white;
+  cursor: pointer;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .next {
   width: 8rem;
@@ -157,6 +170,19 @@
   border: none;
   font-size: 1.1rem;
   color: white;
+  cursor: pointer;
+}
+.next_disable {
+  width: 8rem;
+  height: 2.5rem;
+  background-color: #73abff;
+  border-radius: 1.2rem;
+  border: none;
+  font-size: 1.1rem;
+  color: white;
+  cursor: pointer;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .post {
   width: 8rem;

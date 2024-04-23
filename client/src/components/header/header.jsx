@@ -15,9 +15,10 @@ import {
   setToggleMobileMenu,
 } from "../../redux/app/appSlice";
 import { useSelector } from "react-redux";
+import { user } from "../../redux/user/userSlice";
 
 const Header = () => {
-  let c = false;
+  const userInfo = useSelector(user);
   const deskstopToggle = useSelector(desktopMenu);
   const dispatch = useDispatch();
   const handleToggleDesktopMenu = () => {
@@ -43,7 +44,7 @@ const Header = () => {
     <section className={style.header_container}>
       <div className={style.header_section}>
         <span className={style.brand_text}>Swip Tory</span>
-        {c ? (
+        {!userInfo?.name ? (
           <div className={style.header_register_box}>
             <button
               onClick={() => handleSetRegisterPage()}

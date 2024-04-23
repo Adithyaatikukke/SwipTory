@@ -1,8 +1,11 @@
 import express from "express";
-import { createStory } from "../controller/story.js";
+import { createStory, getAllListedStories } from "../controller/story.js";
+import { varifyToken } from "../authentication/vairifyUserToken.js";
 
 const router = express.Router();
 
-router.post("/post", createStory);
+router
+  .get("/stories", getAllListedStories)
+  .post("/create", varifyToken, createStory);
 
 export default router;
