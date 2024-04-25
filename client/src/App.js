@@ -48,9 +48,6 @@ function App() {
     handleGetUserAllStrories();
   }, [toggle1, toggle3]);
 
-  /*  useEffect(() => {
-    window.location.reload();
-  }, [toggle3]);  */
   return (
     <div className="app-container">
       <ToastContainer />

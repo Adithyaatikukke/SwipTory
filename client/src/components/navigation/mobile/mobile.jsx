@@ -12,7 +12,7 @@ import {
 import { logoutUser, user } from "../../../redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 const Mobile = () => {
-  const { _id } = useSelector(user);
+  const { _id, name } = useSelector(user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleToggleMobileMenu = () => {
@@ -42,20 +42,20 @@ const Mobile = () => {
   return (
     <section className={style.mobile_container}>
       <div className={style.mobile_section}>
-        <div className={style.mobile_user_sec}>
-          <span className={style.user_img}>
-            <img src={userImage} alt="" />
-          </span>
-          <span className={style.username}> Rishikesh</span>
-          <span
-            onClick={() => handleToggleMobileMenu()}
-            className={style.close}
-          >
-            <IoMdClose size={25} />
-          </span>
-        </div>
         {_id ? (
           <>
+            <div className={style.mobile_user_sec}>
+              <span className={style.user_img}>
+                <img src={userImage} alt="" />
+              </span>
+              <span className={style.username}> {name}</span>
+              <span
+                onClick={() => handleToggleMobileMenu()}
+                className={style.close}
+              >
+                <IoMdClose size={25} />
+              </span>
+            </div>
             <button onClick={() => handleNavigateUserNextPage("/")}>
               Your Story
             </button>
@@ -66,10 +66,10 @@ const Mobile = () => {
             <button onClick={() => handleLogOutUser()}>Logout</button>
           </>
         ) : (
-          <>
+          <div className={style.logout_btns}>
             <button onClick={() => handleSetSignPage()}>Sign in</button>
             <button onClick={() => handleSetRegisterPage()}>Register</button>
-          </>
+          </div>
         )}
       </div>
     </section>
