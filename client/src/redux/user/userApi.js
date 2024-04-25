@@ -37,3 +37,20 @@ export const getUserAllStories = () => {
     config
   );
 };
+export const editUserStory = (data) => {
+  const config = getToken();
+  return axios.post(
+    `${process.env.REACT_APP_BACKEND_API}/node/api/v1/user/edit/story`,
+    data,
+    config
+  );
+};
+
+export const addToBookmark = (data) => {
+  const config = getToken();
+  return axios.post(
+    `${process.env.REACT_APP_BACKEND_API}/node/api/v1/user/bookmark`,
+    data,
+    config
+  );
+};

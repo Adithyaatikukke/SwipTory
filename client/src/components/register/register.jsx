@@ -3,6 +3,7 @@ import style from "./register.module.css";
 import { useSelector } from "react-redux";
 import {
   registerMode,
+  setRefreshToggle,
   setRegisterMode,
   setToggleDesktopMenu,
 } from "../../redux/app/appSlice";
@@ -17,6 +18,7 @@ import {
   userFatching,
   userToggle,
 } from "../../redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const registerStatus = useSelector(registerMode);
@@ -27,6 +29,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [registarErrorBackend, setRegisterErrorBackend] = useState(false);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const toggle = useSelector(userToggle);
   const error = useSelector(registerError);
@@ -57,6 +60,8 @@ const Register = () => {
   };
   const handleResetRegisterPage = () => {
     dispatch(setRegisterMode());
+    dispatch(setRefreshToggle());
+    navigate("/");
   };
   useEffect(() => {
     if (isLoading && !error) {

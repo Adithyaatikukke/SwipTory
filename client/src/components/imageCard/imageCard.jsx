@@ -1,12 +1,20 @@
 import React from "react";
 import style from "./imageCard.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { listedStories, setCategory } from "../../redux/story/storySlice";
 const ImageCard = ({ card, selectCategory, setSelectCategory }) => {
-  const handleSetcategory = (category) => {
-    setSelectCategory(category);
+  const allStories = useSelector(listedStories);
+  const dispatch = useDispatch();
+  const handleSetcategory = (clickCategory) => {
+    setSelectCategory(clickCategory);
+    const category = allStories.find(
+      ({ category }) => category === clickCategory
+    );
+    dispatch(setCategory({ stories: category, category: clickCategory }));
   };
   return (
     <section
-      onClick={() => setSelectCategory(card.name)}
+      onClick={() => handleSetcategory(card.name)}
       className={`${
         selectCategory === card.name
           ? style.imgcard_container_border

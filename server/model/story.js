@@ -6,6 +6,7 @@ const storySchema = new Schema(
     owner: { type: String, required: true },
     stories: { type: Array, required: true },
     category: { type: String, required: true },
+    likes: { type: Array, default: [] },
   },
   { timestamps: true }
 );

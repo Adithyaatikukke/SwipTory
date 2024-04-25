@@ -11,20 +11,26 @@ import {
 import { BeatLoader } from "react-spinners";
 import {
   createStoryAysnc,
+  editUserStoryAysnc,
   stroyToggle,
   userFatching,
+  userStoryToggle,
   userToggle,
 } from "../../redux/user/userSlice";
 
 const AddStory = () => {
   const dispatch = useDispatch();
   const toggle1 = useSelector(stroyToggle);
-  const toggle2 = useSelector(toggle);
+  const toggle2 = useSelector(userStoryToggle);
   const isFetching = useSelector(userFatching);
   const userEditStory = useSelector(editStory);
   const editValue = JSON.stringify(userEditStory);
 
-  const [category, setCategory] = useState("Food");
+  const [validSlides, setValidSlides] = useState(true);
+
+  const [category, setCategory] = useState(
+    userEditStory?.category ? JSON.parse(editValue).category : "Food"
+  );
   const [isLoading, setIsloading] = useState(false);
   const [slides, setSlides] = useState(
     userEditStory?.stories?.length > 0
@@ -57,6 +63,23 @@ const AddStory = () => {
       handleSetPrevSelectValue(filterSlides[filterSlides.length - 1]);
     }
     setSlides(filterSlides);
+  };
+
+  const checkSlides = () => {
+    for (let slide of slides) {
+      if (
+        !slide.id ||
+        !slide.heading ||
+        !category ||
+        !slide.description ||
+        !slide.image
+      ) {
+        setValidSlides(true);
+        return;
+      }
+    }
+
+    setValidSlides(false);
   };
 
   const handleSetValuesToSlides = (index, value, type) => {
@@ -118,6 +141,7 @@ const AddStory = () => {
       setSelectSlide(val);
       setSlides(filterVal);
     }
+    checkSlides();
   };
 
   const handleChangeSlide = (slideId) => {
@@ -156,7 +180,17 @@ const AddStory = () => {
       }
       setError(false);
       setIsloading(true);
-      dispatch(createStoryAysnc({ story: slides, category }));
+      if (userEditStory?._id) {
+        dispatch(
+          editUserStoryAysnc({
+            id: JSON.parse(editValue)._id,
+            editStory: slides,
+            category,
+          })
+        );
+      } else {
+        dispatch(createStoryAysnc({ story: slides, category }));
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -175,7 +209,7 @@ const AddStory = () => {
       setIsloading(false);
       handleSetAddStoryPage();
     }
-  }, [toggle1]);
+  }, [toggle1, toggle2]);
 
   return (
     <>
@@ -270,7 +304,7 @@ const AddStory = () => {
                   className={style.category_input}
                 >
                   <option value="Food">Food</option>
-                  <option value="Health">Health</option>
+                  <option value="Fitness">Fitness</option>
                   <option value="Travel">Travel</option>
                   <option value="Movies">Movies</option>
                   <option value="Education">Education</option>
@@ -311,9 +345,13 @@ const AddStory = () => {
                   Next
                 </button>
               </div>
-              <button onClick={() => handleSubmit()} className={style.post}>
+              <button
+                disabled={validSlides ? true : false}
+                onClick={() => handleSubmit()}
+                className={`${validSlides ? style.post_disable : style.post}`}
+              >
                 {!isLoading ? (
-                  userEditStory.length > 0 ? (
+                  userEditStory?._id ? (
                     "Update"
                   ) : (
                     "Post"
@@ -415,18 +453,12 @@ const AddStory = () => {
               <div className={style.mobile_input}>
                 <span>Category</span>
                 <select
-                  value={selectSlide.category}
-                  onChange={(e) =>
-                    handleSetValuesToSlides(
-                      selectSlide.id,
-                      e.target.value,
-                      "CATEGORY"
-                    )
-                  }
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                   className={style.mobile_category_input}
                 >
                   <option value="food">Food</option>
-                  <option value="Health">Health</option>
+                  <option value="Fitness">Fitness</option>
                   <option value="Travel">Travel</option>
                   <option value="Movies">Movies</option>
                   <option value="Education">Education</option>
@@ -438,7 +470,15 @@ const AddStory = () => {
             {error ? "All fieilds must be filled!" : ""}
           </span>
           <button onClick={() => handleSubmit()} className={style.mobile_post}>
-            {userEditStory.length > 0 ? "Update" : "Post"}
+            {!isLoading ? (
+              userEditStory?._id ? (
+                "Update"
+              ) : (
+                "Post"
+              )
+            ) : (
+              <BeatLoader color="white" />
+            )}
           </button>
         </div>
       </section>

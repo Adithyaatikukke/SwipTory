@@ -1,0 +1,6 @@
+.bookmarkpage_container {
+  width: 100%;
+}
+.bookmarkpage_container_blur {
+  filter: blur(4px);
+}

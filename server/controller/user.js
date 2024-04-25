@@ -1,5 +1,6 @@
 import { hashUserPassword, varifyPassword } from "../authentication/bcrypt.js";
 import { generateJwtToken } from "../config/GenerateJwtTokens.js";
+import mongoose from "mongoose";
 import Story from "../model/story.js";
 import User from "../model/user.js";
 
@@ -79,10 +80,11 @@ const getUserAllStories = async (req, res) => {
     const { _id } = req.user;
     if (_id) {
       const userAllStories = (await Story.find({ owner: _id })).map(
-        ({ stories, _id }) => {
+        ({ stories, _id, category }) => {
           return {
             stories,
             _id,
+            category,
           };
         }
       );
@@ -98,13 +100,62 @@ const getUserAllStories = async (req, res) => {
 
 const editUserStory = async (req, res) => {
   try {
-    const { _id } = req.user;
-    const { editStory, id } = req.body;
+    const { editStory, id, category } = req.body;
 
-    const edit = await Story.findByIdAndUpdate(id);
+    const edit = await Story.findByIdAndUpdate(id, {
+      stories: editStory,
+      category,
+    });
+
+    res.status(200).json(edit);
   } catch (error) {
     res.status(500).json({ message: error.message });
     console.log(error);
   }
 };
-export { getLoggedinUser, registerUser, loginUser, getUserAllStories };
+
+export const addToBookmark = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { id } = req.body;
+
+    if (_id) {
+      const story = await Story.findById(id);
+      const alreadyInBookmark = await User.findById(_id).select({
+        bookmarks: 1,
+      });
+
+      if (
+        alreadyInBookmark?.bookmarks?.find(({ _id }) => _id.toString() === id)
+      ) {
+        const user = await User.findByIdAndUpdate(_id, {
+          $pull: {
+            bookmarks: {
+              _id: new mongoose.Types.ObjectId(id),
+            },
+          },
+        });
+        res.status(201).json(user);
+      } else {
+        const user = await User.findByIdAndUpdate(_id, {
+          $push: {
+            bookmarks: story,
+          },
+        });
+        res.status(201).json(user);
+      }
+    } else {
+      res.status(400).json({ message: "_id is required" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log(error);
+  }
+};
+export {
+  getLoggedinUser,
+  registerUser,
+  loginUser,
+  getUserAllStories,
+  editUserStory,
+};

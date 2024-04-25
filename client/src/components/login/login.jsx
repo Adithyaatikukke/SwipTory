@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import {
   loginMode,
   setLoginMode,
+  setRefreshToggle,
   setToggleDesktopMenu,
 } from "../../redux/app/appSlice";
 import { IoMdEye } from "react-icons/io";
@@ -16,6 +17,7 @@ import {
   siginError,
   userToggle,
 } from "../../redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const loginStatus = useSelector(loginMode);
@@ -26,12 +28,16 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [siginErrorBackend, setSiginErrorBackend] = useState(false);
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const toggle = useSelector(userToggle);
   const error = useSelector(siginError);
 
   const handleSetloginToggle = () => {
     dispatch(setLoginMode());
+    dispatch(setRefreshToggle());
+    navigate("/");
   };
 
   const handleSubmitForm = () => {

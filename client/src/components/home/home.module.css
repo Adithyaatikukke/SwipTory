@@ -1,6 +1,7 @@
 .home_category_box {
   overflow: auto;
   margin-top: 2rem;
+
   max-width: 95%;
   width: 100%;
   display: flex;
@@ -14,6 +15,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 5rem;
 }
 .home_stories_conatiner {
   width: 95%;

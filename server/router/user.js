@@ -1,5 +1,7 @@
 import express from "express";
 import {
+  addToBookmark,
+  editUserStory,
   getLoggedinUser,
   getUserAllStories,
   loginUser,
@@ -10,7 +12,8 @@ const router = express.Router();
 
 router
   .get("/", varifyToken, getLoggedinUser)
-  .patch("/edit/story", varifyToken)
+  .post("/bookmark", varifyToken, addToBookmark)
+  .post("/edit/story", varifyToken, editUserStory)
   .get("/allStories", varifyToken, getUserAllStories)
   .post("/register", registerUser)
   .post("/login", loginUser);

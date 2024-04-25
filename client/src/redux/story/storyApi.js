@@ -19,3 +19,17 @@ export const getAllStories = (data) => {
     );
   }
 };
+
+export const getShareStory = (id) => {
+  return axios.get(
+    `${process.env.REACT_APP_BACKEND_API}/node/api/v1/story/shareStory/${id}`
+  );
+};
+export const likeStory = (data) => {
+  const config = getToken();
+  return axios.post(
+    `${process.env.REACT_APP_BACKEND_API}/node/api/v1/story/likeordislike`,
+    data,
+    config
+  );
+};

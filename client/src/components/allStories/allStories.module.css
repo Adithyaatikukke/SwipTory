@@ -40,6 +40,10 @@
   justify-content: center;
   align-items: center;
 }
+.not_found_conatiner {
+  width: 100%;
+  background-color: #ff7373;
+}
 .no_story {
   color: #8e8e8e;
   font-size: 1.2rem;

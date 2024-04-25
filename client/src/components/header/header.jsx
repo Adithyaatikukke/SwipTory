@@ -16,10 +16,12 @@ import {
 } from "../../redux/app/appSlice";
 import { useSelector } from "react-redux";
 import { user } from "../../redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const userInfo = useSelector(user);
   const deskstopToggle = useSelector(desktopMenu);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleToggleDesktopMenu = () => {
     dispatch(setToggleDesktopMenu());
@@ -40,10 +42,18 @@ const Header = () => {
   const handleSetAddStorypage = () => {
     dispatch(setAddStoryMode());
   };
+  const navigateUserToNextPage = (route) => {
+    navigate(route);
+  };
   return (
     <section className={style.header_container}>
       <div className={style.header_section}>
-        <span className={style.brand_text}>Swip Tory</span>
+        <span
+          onClick={() => navigateUserToNextPage("/")}
+          className={style.brand_text}
+        >
+          Swip Tory
+        </span>
         {!userInfo?.name ? (
           <div className={style.header_register_box}>
             <button
@@ -61,7 +71,7 @@ const Header = () => {
           </div>
         ) : (
           <div className={style.header_user_info_section}>
-            <button>
+            <button onClick={() => navigateUserToNextPage("/bookmark")}>
               <FaRegBookmark size={17} color="white" />
               Bookmarks
             </button>

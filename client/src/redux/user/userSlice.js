@@ -1,8 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  addToBookmark,
   createStory,
+  editUserStory,
   getloggedinUser,
   getUserAllStories,
+  likeStory,
   loginUser,
   registerUser,
 } from "./userApi";
@@ -17,6 +20,8 @@ const initialState = {
   userToggle: false,
   storyToggle: false,
   userAllStories: [],
+  userStoryToggle: false,
+  bookMarkToggle: false,
 };
 
 export const registerUserAysnc = createAsyncThunk(
@@ -50,6 +55,22 @@ export const getuserAllStoriesAysnc = createAsyncThunk(
   "user/get/allstories",
   async (data) => {
     const response = await getUserAllStories();
+    return response.data;
+  }
+);
+
+export const editUserStoryAysnc = createAsyncThunk(
+  "user/edit/story",
+  async (data) => {
+    const response = await editUserStory(data);
+    return response.data;
+  }
+);
+
+export const addToBookmarkAysnc = createAsyncThunk(
+  "user/add/bookmark",
+  async (data) => {
+    const response = await addToBookmark(data);
     return response.data;
   }
 );
@@ -152,6 +173,32 @@ const userSlice = createSlice({
         state.userFatching = false;
         state.userError = true;
         state.storyToggle = state.storyToggle ? false : true;
+      })
+      .addCase(editUserStoryAysnc.pending, (state, action) => {
+        state.userFatching = true;
+        state.userError = false;
+      })
+      .addCase(editUserStoryAysnc.fulfilled, (state, action) => {
+        state.userFatching = false;
+        state.userStoryToggle = state.userStoryToggle ? false : true;
+      })
+      .addCase(editUserStoryAysnc.rejected, (state, action) => {
+        state.userFatching = false;
+        state.userError = true;
+        state.userStoryToggle = state.userStoryToggle ? false : true;
+      })
+      .addCase(addToBookmarkAysnc.pending, (state, action) => {
+        state.userFatching = true;
+        state.userError = false;
+      })
+      .addCase(addToBookmarkAysnc.fulfilled, (state, action) => {
+        state.userFatching = false;
+        state.bookMarkToggle = state.bookMarkToggle ? false : true;
+      })
+      .addCase(addToBookmarkAysnc.rejected, (state, action) => {
+        state.userFatching = false;
+        state.userError = true;
+        state.bookMarkToggle = state.bookMarkToggle ? false : true;
       });
   },
 });
@@ -165,5 +212,7 @@ export const stroyToggle = (state) => state.user.storyToggle;
 export const siginError = (state) => state.user.siginError;
 export const userFatching = (state) => state.user.userFatching;
 export const userToggle = (state) => state.user.userToggle;
+export const userStoryToggle = (state) => state.user.userStoryToggle;
+export const bookMarkToggle = (state) => state.user.bookMarkToggle;
 
 export default userSlice.reducer;

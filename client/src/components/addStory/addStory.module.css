@@ -192,6 +192,18 @@
   border: none;
   font-size: 1.1rem;
   color: white;
+  cursor: pointer;
+}
+.post_disable {
+  width: 8rem;
+  height: 2.5rem;
+  background-color: #ff7373;
+  border-radius: 1.2rem;
+  border: none;
+  font-size: 1.1rem;
+  color: white;
+  cursor: pointer;
+  opacity: 0.5;
 }
 .category_input {
   width: 100%;

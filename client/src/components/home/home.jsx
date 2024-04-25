@@ -17,7 +17,6 @@ import Story from "../story/story";
 
 const Home = () => {
   const [selectCategory, setSelectCategory] = useState("All");
-
   const desktopToggle = useSelector(desktopMenu);
   const mobileToggle = useSelector(mobileMenu);
 

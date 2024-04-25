@@ -71,6 +71,7 @@
   border-radius: 1.1rem;
   font-size: 1rem;
   font-weight: 600;
+  cursor: pointer;
 }
 .text {
   font-size: 1.8rem;
@@ -107,10 +108,9 @@
     height: 70vh;
     top: 20%;
     background-color: white;
-    box-shadow: 0px 4px 30px 0px #ffffff40;
 
     left: 20%;
-    border: 1px solid red;
+
     border-radius: 1rem;
   }
 }
@@ -123,10 +123,9 @@
     height: 70vh;
     top: 20%;
     background-color: white;
-    box-shadow: 0px 4px 30px 0px #ffffff40;
 
     left: 10%;
-    border: 1px solid red;
+
     border-radius: 1rem;
   }
 }
@@ -139,10 +138,9 @@
     height: 70vh;
     top: 20%;
     background-color: white;
-    box-shadow: 0px 4px 30px 0px #ffffff40;
 
     left: 10%;
-    border: 1px solid red;
+
     border-radius: 1rem;
   }
 

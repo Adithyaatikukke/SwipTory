@@ -8,6 +8,7 @@ const initialState = {
   addStoryMode: false,
   editStory: [],
   toggle: false,
+  refreshToggle: false,
 };
 
 const appSlice = createSlice({
@@ -19,6 +20,9 @@ const appSlice = createSlice({
     },
     setToggleMobileMenu: (state, action) => {
       state.mobileMenu = state.mobileMenu ? false : true;
+    },
+    setRefreshToggle: (state) => {
+      state.refreshToggle = state.refreshToggle ? false : true;
     },
 
     setRegisterMode: (state, action) => {
@@ -43,6 +47,7 @@ export const addStoryMode = (state) => state.app.addStoryMode;
 export const loginMode = (state) => state.app.loginMode;
 export const editStory = (state) => state.app.editStory;
 export const toggle = (state) => state.app.toggle;
+export const refreshToggle = (state) => state.app.refreshToggle;
 export const {
   setToggleDesktopMenu,
   setToggleMobileMenu,
@@ -50,5 +55,6 @@ export const {
   setLoginMode,
   setAddStoryMode,
   setEditStory,
+  setRefreshToggle,
 } = appSlice.actions;
 export default appSlice.reducer;
